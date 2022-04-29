@@ -1,4 +1,4 @@
-const toggleKeyLight = require('./keylight');
+const {toggleKeyLight, turnKeyLightOn} = require('./keylight');
 const bonjour = require('bonjour')();
 
 const optionsWeb = {"On": 1, "Temperature": 226, "Brightness": 30};
@@ -8,10 +8,15 @@ let args = process.argv.slice(2).map(a => a.toLowerCase());
 let option = args.some(a => a === 'white') ? optionsWhite : args.some(a => a === 'web') ? optionsWeb : undefined;
 
 const browser = bonjour.find({type: 'elg'}, function (service) {
-    toggleKeyLight({
+    let keylightService = {
         ip: service['referer'].address,
         port: service.port
-    }, option);
+    };
+    if (option) {
+        turnKeyLightOn(keylightService, option);
+    } else {
+        toggleKeyLight(keylightService);
+    }
 });
 
 const counter = function (value = 6) {

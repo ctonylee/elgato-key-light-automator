@@ -4,13 +4,17 @@ async function getKeylight(url) {
     return await axios.get(url);
 }
 
-async function toggleKeyLight(keylightService, option) {
+async function turnKeyLightOn(keylightService, option) {
+    const keylightUrl = `http://${keylightService.ip}:${keylightService.port}/elgato/lights`;
+    return await turnLightOn(keylightUrl, option);
+}
+
+async function toggleKeyLight(keylightService) {
     const keylightUrl = `http://${keylightService.ip}:${keylightService.port}/elgato/lights`;
     const keylightData = await getKeylight(keylightUrl);
-    console.log(`… `, keylightUrl, keylightData.data);
     const light = keylightData.data.lights[0];
 
-    return light.on ? await turnLightOff(keylightUrl) : await turnLightOn(keylightUrl, option);
+    return light.on ? await turnLightOff(keylightUrl) : await turnLightOn(keylightUrl);
 }
 
 async function turnLightOff(url) {
@@ -27,13 +31,14 @@ async function turnLightOn(url, options) {
     return await axios.put(url, {
         "Lights": [
             {
-                ...{
-                    "On": 1
-                },
+                "On": 1,
                 ...options,
             }
         ]
     });
 }
 
-module.exports = toggleKeyLight;
+module.exports = {
+    toggleKeyLight: toggleKeyLight,
+    turnKeyLightOn: turnKeyLightOn
+};
