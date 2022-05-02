@@ -1,7 +1,7 @@
 const {toggleKeyLight, turnKeyLightOn} = require('./keylight');
 const bonjour = require('bonjour')();
 
-const optionsWeb = {"On": 1, "Temperature": 226, "Brightness": 30};
+const optionsWeb = {"On": 1, "Temperature": 226, "Brightness": 50};
 const optionsWhite = {"On": 1, "Temperature": 100, "Brightness": 80};
 
 let args = process.argv.slice(2).map(a => a.toLowerCase());
